@@ -21,24 +21,26 @@ app.get("/webhook", (req, res) => {
 
 // Receive Messages Endpoint
 app.post("/webhook", (req, res) => {
-  const data = req.body;
+    console.log("Received a POST request");
+    const data = req.body;
+    console.log(">>>>> data",data);
 
-  // Check if this is a message event
-  if (data.object && data.entry) {
-    data.entry.forEach((entry) => {
-      const changes = entry.changes;
-      if (changes && changes[0].value.messages) {
-        const message = changes[0].value.messages[0];
-        console.log("Received message: ", message);
+    // Check if this is a message event
+    if (data.object && data.entry) {
+        data.entry.forEach((entry) => {
+        const changes = entry.changes;
+        if (changes && changes[0].value.messages) {
+            const message = changes[0].value.messages[0];
+            console.log("Received message: ", message);
 
-        // Do something with the received message
-        const from = message.from; // WhatsApp sender's phone number
-        const text = message.text?.body || "No text message"; // Message content
-        console.log(`Message from ${from}: ${text}`);
-      }
-    });
-  }
-  res.status(200).send("EVENT_RECEIVED");
+            // Do something with the received message
+            const from = message.from; // WhatsApp sender's phone number
+            const text = message.text?.body || "No text message"; // Message content
+            console.log(`Message from ${from}: ${text}`);
+        }
+        });
+    }
+    res.status(200).send("EVENT_RECEIVED");
 });
 
 // Start server
